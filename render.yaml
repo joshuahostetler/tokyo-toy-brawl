@@ -1,9 +1,0 @@
-# Render Blueprint: deploys the game server (which also serves the website) as one web service.
-services:
-  - type: web
-    name: tokyo-toy-brawl
-    runtime: node
-    plan: free
-    buildCommand: npm install --include=dev && npm run build
-    startCommand: npm start
-    healthCheckPath: /
