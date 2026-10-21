@@ -1,0 +1,106 @@
+:root {
+  --pink: #ff4fb8;
+  --cyan: #29e6ff;
+  --ink: #1b1235;
+  --panel: rgba(27, 18, 53, 0.72);
+  font-family: "Trebuchet MS", "Hiragino Maru Gothic ProN", system-ui, sans-serif;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; overflow: hidden; background: #1b1440; color: #fff; }
+#game { position: fixed; inset: 0; width: 100%; height: 100%; display: block; }
+[hidden] { display: none !important; }
+
+/* ---------- Lobby ---------- */
+#lobby {
+  position: fixed; inset: 0; display: grid; place-items: center; padding: 16px; overflow: auto;
+  background: radial-gradient(circle at 30% 20%, #ff8ad8 0%, transparent 40%),
+              radial-gradient(circle at 80% 80%, #29e6ff 0%, transparent 35%),
+              linear-gradient(160deg, #2a1a5e, #7a3e7a 60%, #ffae70);
+}
+.card {
+  width: min(860px, 100%); background: var(--panel); border: 3px solid #fff; border-radius: 24px;
+  padding: 24px 28px; box-shadow: 0 12px 0 rgba(0,0,0,0.25); backdrop-filter: blur(6px);
+}
+h1 { margin: 0; font-size: clamp(28px, 5vw, 46px); letter-spacing: 1px; text-shadow: 3px 3px 0 var(--pink); }
+h1 span { font-size: 0.5em; color: var(--cyan); text-shadow: none; vertical-align: middle; }
+.tagline { margin: 6px 0 18px; opacity: 0.9; }
+.lobby-grid { display: grid; grid-template-columns: 1fr 260px; gap: 20px; align-items: start; }
+@media (max-width: 640px) { .lobby-grid { grid-template-columns: 1fr; } }
+label { display: block; font-weight: bold; margin: 10px 0 6px; }
+input {
+  width: 100%; font: inherit; font-size: 18px; padding: 10px 14px; border-radius: 12px;
+  border: 3px solid #fff; background: #fff; color: var(--ink);
+}
+#animal-picker { display: flex; flex-wrap: wrap; gap: 8px; }
+.animal, #play {
+  font: inherit; font-weight: bold; cursor: pointer; border-radius: 999px; border: 3px solid #fff;
+}
+.animal { padding: 8px 14px; background: transparent; color: #fff; }
+.animal.selected { background: #fff; color: var(--ink); }
+#play {
+  margin-top: 18px; width: 100%; padding: 14px; font-size: 20px; background: var(--pink); color: #fff;
+  box-shadow: 0 5px 0 #b02a7d;
+}
+#play:active { transform: translateY(3px); box-shadow: 0 2px 0 #b02a7d; }
+#play:disabled { opacity: 0.6; cursor: wait; }
+#lobby-error { color: #ffd23f; min-height: 1.2em; margin: 8px 0 0; }
+#preview { width: 100%; aspect-ratio: 1; border-radius: 18px; background: rgba(255,255,255,0.12); }
+.controls { display: flex; flex-wrap: wrap; gap: 8px 16px; margin-top: 18px; font-size: 14px; opacity: 0.95; }
+kbd {
+  display: inline-block; min-width: 1.6em; padding: 1px 6px; margin-right: 3px; border-radius: 6px;
+  background: #fff; color: var(--ink); font: bold 12px/1.6 monospace; text-align: center;
+}
+
+/* ---------- HUD ---------- */
+#hud { position: fixed; inset: 0; pointer-events: none; user-select: none; }
+#crosshair { position: absolute; left: 50%; top: 50%; width: 0; height: 0; }
+#crosshair i { position: absolute; background: #fff; box-shadow: 0 0 2px #000; transition: all 0.12s; }
+#crosshair i:nth-child(1) { width: 2px; height: 8px; left: -1px; top: -16px; }
+#crosshair i:nth-child(2) { width: 2px; height: 8px; left: -1px; top: 8px; }
+#crosshair i:nth-child(3) { width: 8px; height: 2px; left: -16px; top: -1px; }
+#crosshair i:nth-child(4) { width: 8px; height: 2px; left: 8px; top: -1px; }
+#crosshair.aiming i:nth-child(1) { top: -10px; }
+#crosshair.aiming i:nth-child(2) { top: 2px; }
+#crosshair.aiming i:nth-child(3) { left: -10px; }
+#crosshair.aiming i:nth-child(4) { left: 2px; }
+#hitmarker {
+  position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); font-size: 28px;
+  color: var(--cyan); text-shadow: 0 0 6px #000; opacity: 0; transition: opacity 0.05s;
+}
+#vignette {
+  position: absolute; inset: 0; opacity: 0;
+  background: radial-gradient(circle, transparent 50%, rgba(80, 180, 255, 0.65) 100%);
+}
+#killfeed { position: absolute; top: 16px; right: 16px; display: flex; flex-direction: column; align-items: flex-end; gap: 6px; max-width: 46vw; }
+.feed-row { background: var(--panel); padding: 6px 12px; border-radius: 10px; font-size: 14px; animation: pop 0.2s ease-out; }
+@keyframes pop { from { transform: scale(0.8); opacity: 0; } }
+#minimap { position: absolute; top: 16px; left: 16px; width: 180px; height: 180px; border: 3px solid #fff; border-radius: 16px; }
+#health {
+  position: absolute; left: 16px; bottom: 16px; width: 260px; height: 28px; border: 3px solid #fff;
+  border-radius: 999px; background: var(--panel); overflow: hidden;
+}
+#health-fill { height: 100%; background: #5ee07a; transition: width 0.2s; }
+#health-text { position: absolute; inset: 0; display: grid; place-items: center; font-weight: bold; text-shadow: 0 1px 2px #000; }
+#weapon { position: absolute; right: 16px; bottom: 16px; text-align: right; background: var(--panel); padding: 10px 16px; border-radius: 14px; border: 3px solid #fff; }
+#weapon-name { font-size: 20px; font-weight: bold; }
+#ammo { color: var(--cyan); }
+#slots { position: absolute; left: 50%; bottom: 16px; transform: translateX(-50%); display: flex; gap: 6px; }
+.slot { background: var(--panel); padding: 4px 10px; border-radius: 10px; font-size: 12px; opacity: 0.45; border: 2px solid transparent; white-space: nowrap; }
+.slot b { margin-right: 6px; color: var(--pink); }
+.slot.owned { opacity: 0.85; }
+.slot.active { opacity: 1; border-color: #fff; }
+#prompt { position: absolute; left: 50%; bottom: 70px; transform: translateX(-50%); background: var(--panel); padding: 8px 16px; border-radius: 12px; font-weight: bold; white-space: nowrap; }
+#center-msg { position: absolute; left: 50%; top: 35%; transform: translate(-50%, -50%); font-size: 40px; font-weight: bold; text-align: center; text-shadow: 3px 3px 0 var(--pink); }
+#center-msg small { font-size: 20px; text-shadow: none; }
+#scoreboard { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); background: var(--panel); border: 3px solid #fff; border-radius: 18px; padding: 16px 20px; min-width: min(480px, 92vw); }
+#scoreboard table { width: 100%; border-collapse: collapse; }
+#scoreboard th, #scoreboard td { padding: 6px 10px; text-align: left; }
+#scoreboard th { color: var(--cyan); }
+#scoreboard tr.me td { color: #ffd23f; font-weight: bold; }
+#click-to-play { position: absolute; left: 50%; top: 60%; transform: translateX(-50%); background: var(--pink); padding: 10px 22px; border-radius: 999px; font-weight: bold; font-size: 20px; }
+@media (max-width: 760px), (max-height: 500px) {
+  #minimap { width: 110px; height: 110px; }
+  #slots { display: none; }
+  #health { width: 160px; }
+  #weapon-name { font-size: 15px; }
+}

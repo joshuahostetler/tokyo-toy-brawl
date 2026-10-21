@@ -1,0 +1,29 @@
+{
+  "name": "tokyo-toy-brawl",
+  "version": "0.1.0",
+  "description": "Multiplayer non-lethal FPS with Japanese animals in a toy Tokyo",
+  "scripts": {
+    "dev": "concurrently -k -n server,client \"tsx watch server/index.ts\" \"vite\"",
+    "build": "tsc --noEmit && vite build",
+    "start": "tsx server/index.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "three": "^0.169.0",
+    "tsx": "^4.19.1",
+    "ws": "^8.18.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.7.5",
+    "@types/three": "^0.169.0",
+    "@types/ws": "^8.5.12",
+    "concurrently": "^9.0.1",
+    "typescript": "^5.6.3",
+    "vite": "^5.4.10"
+  },
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  }
+}
